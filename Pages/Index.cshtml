@@ -1,0 +1,60 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Menú Semanal";
+}
+
+<div class="menu-container">
+    <h1 class="menu-title">Menú Semanal</h1>
+
+    <form method="post" class="menu-form">
+        <div class="table-responsive">
+            <table class="table table-bordered menu-table">
+                <thead>
+                    <tr>
+                        <th>Comida</th>
+                        @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
+                        {
+                            <th class="dia-header">@Model.WeeklyMenu[i].Dia</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="comida-label">Desayuno</td>
+                        @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
+                        {
+                            <td>
+                                <input asp-for="WeeklyMenu[i].Desayuno" class="form-control menu-input" />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="comida-label">Almuerzo</td>
+                        @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
+                        {
+                            <td>
+                                <input asp-for="WeeklyMenu[i].Almuerzo" class="form-control menu-input" />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td class="comida-label">Cena</td>
+                        @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
+                        {
+                            <td>
+                                <input asp-for="WeeklyMenu[i].Cena" class="form-control menu-input" />
+                            </td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="menu-actions">
+            <button type="submit" asp-page-handler="Generar" class="btn btn-primary btn-lg">
+                Generar
+            </button>
+        </div>
+    </form>
+</div>

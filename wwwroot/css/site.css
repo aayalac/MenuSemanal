@@ -1,0 +1,76 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.menu-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.menu-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.menu-table th {
+  text-align: center;
+  background-color: #f8f9fa;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dia-header {
+  min-width: 130px;
+}
+
+.comida-label {
+  font-weight: 600;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  min-width: 100px;
+  background-color: #f8f9fa;
+}
+
+.menu-input {
+  border: 1px solid #ced4da;
+  text-align: center;
+  min-width: 120px;
+}
+
+.menu-input:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.menu-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.menu-form {
+  margin: 0;
+}
