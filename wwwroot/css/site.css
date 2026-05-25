@@ -18,13 +18,16 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 80px; 
 }
 
 .menu-container {
   max-width: 100%;
-  margin: 0 auto;
+  margin-top:10rem;
   padding: 2rem 1rem;
+  border:solid;
+  border-radius:5%
+  
 }
 
 .menu-title {
