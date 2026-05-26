@@ -18,22 +18,19 @@ html {
 }
 
 body {
-  margin-bottom: 80px; 
+  margin-bottom: 80px;
 }
 
 .menu-container {
-  max-width: 100%;
-  margin-top:10rem;
-  padding: 2rem 1rem;
-  border:solid;
-  border-radius:5%
-  
+    max-width: 100%;
+    margin-top: 15%;    
 }
 
 .menu-title {
   text-align: center;
   margin-bottom: 2rem;
   font-weight: 700;
+  border:solid;
 }
 
 .menu-table th {
