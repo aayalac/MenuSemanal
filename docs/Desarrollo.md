@@ -1,84 +1,83 @@
-##Contexto
-
-Se requiere implementar una apliocacion sensilla para mostrar un men˙ semanal de lunes a domingo a travez de 3 secciÛnes
+# Contexto
+---
+Se requiere implementar una aplicaci√≥n sencilla para mostrar un men√∫ semanal de lunes a domingo a trav√©s de 3 secciones:
 - Desayuno
 - Almuerzo
 - Cena 
 
-Se debe mostrar una grilla con cada uno de los dias de la semana y cada una de las 3 secciones de comidas por dia 
-en cada casilla se debe generar aleatoriamente uno de los elementos de cada dia de acurerdo a las sigueitnes secciones
-asÌ mismo estas casillas puedes ser editables dentro de la misma:
+Se debe mostrar una grilla con cada uno de los d√≠as de la semana y cada una de las 3 secciones de comidas por d√≠a.
+en cada casilla se debe generar aleatoriamente uno de los elementos de cada d√≠a de acuerdo a las siguientes secciones, as√≠ mismo estas casillas puedes ser editables dentro de la misma:
 
-#Almuerzos:
-Pasta carbonara
-Pechuga pollo
-Higado
-Ramen
-Carne molida
-Pollo agridulce
-Albondigas
-Carne en bistec
-Sobrebarriga
-Frijolada
-Costillas de cerdo
-Choriqueso
-Alambre de choripapa
-Strogonof
-Sudado de pollo
-Sudado de carne
-Lentejas
-Arroz mixto
-Carne en verduras
-Macarrones
-Pasta + pollo + salchichas
-Ahullama
-Pollo a la naranja
-Hamburguesa
-Tacos 
-Burritos
-Nachos
-LasaÒa
-costillas de res
-chatas
-trucha
-pure de papa
-bistec al ajo
-carne a la cerveza
-mazorcada
-pollo caprese (tiktok)
-carne a la cocacola
-lomo de cerdo
-crema de espinaca
-pasta + vegetales + pollo
+## Almuerzos:
+- Pasta carbonara
+- Pechuga pollo
+- H√≠gado
+- Ramen
+- Carne molida
+- Pollo agridulce
+- Alb√≥ndigas
+- Carne en bistec
+- Sobrebarriga
+- Frijolada
+- Costillas de cerdo
+- Choriqueso
+- Alambre de choripapa
+- Strogonof
+- Sudado de pollo
+- Sudado de carne
+- Lentejas
+- Arroz mixto
+- Carne en verduras
+- Macarrones
+- Pasta + pollo + salchichas
+- Ahullama
+- Pollo a la naranja
+- Hamburguesa
+- Tacos 
+- Burritos
+- Nachos
+- Lasa√±a
+- costillas de res
+- chatas
+- trucha
+- pure de papa
+- bistec al ajo
+- carne a la cerveza
+- mazorcada
+- pollo caprese (tiktok)
+- carne a la Coca-Cola
+- lomo de cerdo
+- crema de espinaca
+- pasta + vegetales + pollo
 
-Desayunos
-huevos revueltos
-Panquekes
-Caldo
-Cereal
-huevo napolitano
-huevos pericos 
-huevos + arroz
-huevos rancheros
-desayuno americano
-salchichon de pollo
-tortillas 
-caldito pollo
-tajadas + huevo
-tajadas + caldo
+## Desayunos
+- huevos revueltos
+- Panquekes
+- Caldo
+- Cereal
+- huevo napolitano
+- huevos pericos 
+- huevos + arroz
+- huevos rancheros
+- desayuno americano
+- salchichon de pollo
+- tortillas 
+- caldito pollo
+- tajadas + huevo
+- tajadas + caldo
 
-Cenas
-Hot dogs
-Pan de bono
-Choripan
-Brochetas pollo
-Empanadas
-Sandwitch
-caldito pollo
-Panquekes
-pastel de pollo
-sandwitch BBQ
+## Cenas
+- Hot dogs
+- Pan de bono
+- Choripan
+- Brochetas pollo
+- Empanadas
+- Sandwitch
+- caldito pollo
+- Panquekes
+- pastel de pollo
+- sandwitch BBQ
 
-esta informaciÛn puede generarse desde un archivo Json y cada una de las secciÛnes pueden instanciarse desde clases donde se pueden dar sus correspondientes atributos
+Esta informaci√≥n puede generarse desde un archivo Json y cada una de las secci√≥nes pueden instanciarse desde clases donde se pueden dar sus correspondientes atributos.
 
-cuando arranque la aplicaciÛn esta debe mostrar inicialmente y unicamente esta pantalla.
+Cuando arranque la aplicaci√≥n esta debe mostrar inicialmente y unicamente esta pantalla.
