@@ -1,0 +1,16 @@
+# 🐟 Ignorar artefactos de construcción
+**/bin/**
+**/obj/**
+**/.idea/
+**/.vs/
+**/*.user
+**/*.suo
+**/pub*/
+
+# Ignorar la base de datos (se monta como volumen externo)
+**/Data/menus.db
+**/Data/menus.db-*
+
+# Archivos temporales locales
+*.log
+*.cache

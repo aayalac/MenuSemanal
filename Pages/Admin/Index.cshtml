@@ -1,0 +1,77 @@
+@page
+@model Admin.IndexModel
+@{
+    ViewData["Title"] = "Administración";
+}
+
+<h2 class="mb-4">⚙️ Administración del Catálogo</h2>
+
+<div class="row g-4">
+    <!-- Gestión de Platos -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">🍳 Gestionar Platos</h5>
+                <p class="card-text text-muted">Agregar, editar o eliminar platos del catálogo por categoría.</p>
+                <a asp-page="/Admin/Platos/Index" class="btn btn-primary">Ir a Platos</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial de Menús -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">📅 Historial de Menús</h5>
+                <p class="card-text text-muted">Ver menús semanales generados anteriormente.</p>
+                <a asp-page="/Admin/Menus/List" class="btn btn-info">Ir a Menús</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<!-- Estadísticas rápidas -->
+<div class="row g-4 mt-2">
+    <div class="col-md-4">
+        <div class="card bg-light text-center shadow-sm">
+            <div class="card-body">
+                <h3 class="text-primary">@Model.TotalPlatoss</h3>
+                <small class="text-muted">Total de Platos</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light text-center shadow-sm">
+            <div class="card-body">
+                <h3 class="text-success">@Model.TotalDesayunos</h3>
+                <small class="text-muted">Desayunos</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light text-center shadow-sm">
+            <div class="card-body">
+                <h3 class="text-warning">@Model.TotalAlmuerzos</h3>
+                <small class="text-muted">Almuerzos</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card bg-light text-center shadow-sm">
+            <div class="card-body">
+                <h3 class="text-danger">@Model.TotalCenas</h3>
+                <small class="text-muted">Cenas</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card bg-light text-center shadow-sm">
+            <div class="card-body">
+                <h3 class="text-info">@Model.TotalMenus</h3>
+                <small class="text-muted">Menús Generados</small>
+            </div>
+        </div>
+    </div>
+</div>
