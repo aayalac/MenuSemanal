@@ -1,0 +1,45 @@
+@page
+@model Admin.Menus.ListModel
+@{
+    ViewData["Title"] = "Historial de Menús";
+}
+
+<a asp-page="/Admin/Index" class="btn btn-sm btn-outline-secondary mb-3">&larr; Volver al Admin</a>
+<h2>📅 Historial de Menús Generados</h2>
+<p class="text-muted">Consulta los menús semanales que han sido generados previamente.</p>
+
+@if (!Model.Menus.Any())
+{
+    <div class="alert alert-info" role="status">
+        Aún no se han generado menús. Ve a la <a asp-page="/Index">página principal</a> para generar uno.
+    </div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Semana del</th>
+                <th>Fecha de Generación</th>
+                <th>Días</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var menu in Model.Menus)
+            {
+                <tr>
+                    <td>@menu.Id</td>
+                    <td>@menu.SemanaFecha.ToShortDateString()</td>
+                    <td>@menu.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@menu.Dias.Count</td>
+                    <td class="text-end">
+                        <a asp-page="./Detail" asp-route-id="@menu.Id" class="btn btn-sm btn-outline-info">👁️ Ver</a>
+                        <a asp-page="./DeleteConfirm" asp-route-id="@menu.Id" class="btn btn-sm btn-outline-danger">🗑️</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

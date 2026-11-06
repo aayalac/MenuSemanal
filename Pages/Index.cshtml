@@ -6,6 +6,7 @@
 
 <div class="menu-container">
     <h1 class="menu-title">Menú Semanal</h1>
+    <partial name="_AdminNav" />
     <hr />
     <form method="post" class="menu-form">
         <div class="table-responsive">
@@ -25,7 +26,7 @@
                         @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
                         {
                             <td>
-                                <input asp-for="WeeklyMenu[i].Desayuno" class="form-control menu-input" />
+                                <input asp-for="WeeklyMenu[i].Desayuno" class="form-control menu-input" disabled />
                             </td>
                         }
                     </tr>
@@ -34,7 +35,7 @@
                         @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
                         {
                             <td>
-                                <input asp-for="WeeklyMenu[i].Almuerzo" class="form-control menu-input" />
+                                <input asp-for="WeeklyMenu[i].Almuerzo" class="form-control menu-input" disabled />
                             </td>
                         }
                     </tr>
@@ -43,7 +44,7 @@
                         @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
                         {
                             <td>
-                                <input asp-for="WeeklyMenu[i].Cena" class="form-control menu-input" />
+                                <input asp-for="WeeklyMenu[i].Cena" class="form-control menu-input" disabled />
                             </td>
                         }
                     </tr>
@@ -53,8 +54,27 @@
         <hr />
         <div class="menu-actions">
             <button type="submit" asp-page-handler="Generar" class="btn btn-success btn-lg">
-                Generar
+                ✨ Generar Nuevo Menú
             </button>
         </div>
     </form>
 </div>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success mt-3" role="alert">
+        @(Model.SuccessMessage)
+    </div>
+}
+
+@section Scripts {
+    <style>
+        .disabled-input {
+            opacity: 0.85;
+            cursor: default;
+        }
+    </style>
+    <script>
+        document.querySelectorAll('.menu-input').forEach(input => input.classList.add('disabled-input'));
+    </script>
+}

@@ -1,0 +1,52 @@
+@page "{id:int}"
+@model Admin.Menus.DetailModel
+@{
+    ViewData["Title"] = $"Detalle del Menú #{Model.Menu?.Id}";
+}
+
+<a asp-page="../Menus/List" class="btn btn-sm btn-outline-secondary mb-3">&larr; Volver al Historial</a>
+<h2>📅 Menú Semanal #@Model.Menu?.Id</h2>
+
+@if (Model.Menu == null)
+{
+    <div class="alert alert-info">Menú no encontrado.</div>
+    <a asp-page="../Menus/List" class="btn btn-primary">Volver</a>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Semana del</dt>
+                <dd class="col-sm-9">@Model.Menu.SemanaFecha.ToDateTime(TimeOnly.MinValue).ToShortDateString()</dd>
+
+                <dt class="col-sm-3">Generado</dt>
+                <dd class="col-sm-9">@Model.Menu.FechaCreacion.ToString("dd/MM/yyyy HH:mm:ss")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Día</th>
+                    <th>🥞 Desayuno</th>
+                    <th>🍲 Almuerzo</th>
+                    <th>🌙 Cena</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dia in Model.Menu.Dias.OrderBy(d => d.DiaSemana))
+                {
+                    <tr>
+                        <td><strong>@dia.DiaNombre</strong></td>
+                        <td>@(dia.Desayuno?.Nombre ?? "-")</td>
+                        <td>@(dia.Almuerzo?.Nombre ?? "-")</td>
+                        <td>@(dia.Cena?.Nombre ?? "-")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
