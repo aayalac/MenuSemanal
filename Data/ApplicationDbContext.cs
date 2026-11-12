@@ -25,7 +25,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<MenuSemanario>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.HasIndex(e => e.SemanaFecha).IsUnique();
+            // Índice NO único: se pueden guardar varios menús para la misma semana
+            // (cada vez que se pulsa "Generar Nuevo Menú" queda registrado en el historial).
+            entity.HasIndex(e => e.SemanaFecha);
             entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
         });
 

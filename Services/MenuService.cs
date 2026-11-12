@@ -27,21 +27,9 @@ public class MenuService(ApplicationDbContext dbContext, PlatoService platoServi
         if (desayunos.Count == 0 || almuerzos.Count == 0 || cenas.Count == 0)
             throw new InvalidOperationException("Debe haber al menos un plato activo en cada categoría.");
 
-        // La fecha se normaliza al lunes de la semana: hay un índice UNIQUE sobre SemanaFecha
+        // La fecha se normaliza al lunes de la semana, para poder agrupar el historial
+        // por semana. No se borra nada: cada generación queda registrada como un menú más.
         var inicioSemana = InicioDeSemana(fechaBase ?? DateOnly.FromDateTime(DateTime.Today));
-
-        // Si ya existe un menú para esa semana (o cualquier fecha dentro de ella), se reemplaza.
-        // Evita "UNIQUE constraint failed: MenuSemanars.SemanaFecha" al regenerar.
-        var finSemana = inicioSemana.AddDays(7);
-        var anteriores = await dbContext.MenuSemanars
-            .Where(m => m.SemanaFecha >= inicioSemana && m.SemanaFecha < finSemana)
-            .ToListAsync();
-
-        if (anteriores.Count > 0)
-        {
-            dbContext.MenuSemanars.RemoveRange(anteriores); // los MenuDia se borran en cascada
-            await dbContext.SaveChangesAsync();
-        }
 
         var rng = new Random();
         var menu = new MenuSemanario

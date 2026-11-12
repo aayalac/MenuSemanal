@@ -13,6 +13,9 @@ public class IndexModel(MenuService menuService, ILogger<IndexModel> logger) : P
     [BindProperty]
     public List<DiaMenu> WeeklyMenu { get; set; } = [];
 
+    /// <summary>Lunes de la semana a la que pertenece el menú mostrado.</summary>
+    public DateOnly? SemanaFecha { get; set; }
+
     public string? SuccessMessage { get; set; }
     public string? ErrorMessage { get; set; }
 
@@ -23,6 +26,7 @@ public class IndexModel(MenuService menuService, ILogger<IndexModel> logger) : P
         if (menus.Any())
         {
             var latest = menus.First();
+            SemanaFecha = latest.SemanaFecha;
             WeeklyMenu = latest.Dias.OrderBy(d => d.DiaSemana).Select(d => new DiaMenu
             {
                 Dia = d.DiaNombre,
@@ -43,7 +47,7 @@ public class IndexModel(MenuService menuService, ILogger<IndexModel> logger) : P
         try
         {
             await GenerateNewMenuAsync();
-            SuccessMessage = "✨ ¡Menú semanal generado exitosamente!";
+            SuccessMessage = "✨ ¡Menú semanal generado y guardado en el historial!";
         }
         catch (Exception ex)
         {
@@ -58,6 +62,7 @@ public class IndexModel(MenuService menuService, ILogger<IndexModel> logger) : P
     private async Task GenerateNewMenuAsync()
     {
         var menu = await _menuService.GenerateWeeklyMenuAsync();
+        SemanaFecha = menu.SemanaFecha;
         WeeklyMenu = menu.Dias.OrderBy(d => d.DiaSemana).Select(d => new DiaMenu
         {
             Dia = d.DiaNombre,
