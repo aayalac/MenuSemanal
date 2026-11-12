@@ -5,14 +5,16 @@ using MenuSemanal.Services;
 
 namespace MenuSemanal.Pages;
 
-public class IndexModel(MenuService menuService) : PageModel
+public class IndexModel(MenuService menuService, ILogger<IndexModel> logger) : PageModel
 {
     private readonly MenuService _menuService = menuService;
+    private readonly ILogger<IndexModel> _logger = logger;
 
     [BindProperty]
     public List<DiaMenu> WeeklyMenu { get; set; } = [];
 
     public string? SuccessMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     public async Task OnGetAsync()
     {
@@ -38,8 +40,17 @@ public class IndexModel(MenuService menuService) : PageModel
 
     public async Task<IActionResult> OnPostGenerarAsync()
     {
-        await GenerateNewMenuAsync();
-        SuccessMessage = "✨ ¡Menú semanal generado exitosamente!";
+        try
+        {
+            await GenerateNewMenuAsync();
+            SuccessMessage = "✨ ¡Menú semanal generado exitosamente!";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al generar el menú semanal");
+            ErrorMessage = "No se pudo generar el menú. Revisá que exista al menos un plato activo por categoría.";
+        }
+
         ModelState.Clear();
         return Page();
     }

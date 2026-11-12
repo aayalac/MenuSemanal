@@ -67,6 +67,13 @@
     </div>
 }
 
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        @(Model.ErrorMessage)
+    </div>
+}
+
 @section Scripts {
     <style>
         .disabled-input {

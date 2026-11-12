@@ -1,16 +1,18 @@
-# 🐟 Ignorar artefactos de construcción
+# Ignore build outputs
 **/bin/**
 **/obj/**
-**/.idea/
 **/.vs/
-**/*.user
-**/*.suo
-**/pub*/
+**/.idea/
 
-# Ignorar la base de datos (se monta como volumen externo)
-**/Data/menus.db
-**/Data/menus.db-*
+# Ignore DB files
+**/*.db
+**/*.db-wal
+**/*.db-shm
 
-# Archivos temporales locales
-*.log
-*.cache
+# Ignore archives
+*.zip
+*.tar
+*.gz
+
+# Ignore this file
+Dockerfile
