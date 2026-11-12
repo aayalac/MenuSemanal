@@ -27,10 +27,15 @@ public class MenuService(ApplicationDbContext dbContext, PlatoService platoServi
         if (desayunos.Count == 0 || almuerzos.Count == 0 || cenas.Count == 0)
             throw new InvalidOperationException("Debe haber al menos un plato activo en cada categoría.");
 
+        // La fecha se normaliza al lunes de la semana, para poder agrupar el historial
+        // por semana. No se borra nada: cada generación queda registrada como un menú más.
+        var inicioSemana = InicioDeSemana(fechaBase ?? DateOnly.FromDateTime(DateTime.Today));
+
         var rng = new Random();
         var menu = new MenuSemanario
         {
-            SemanaFecha = fechaBase ?? DateOnly.FromDateTime(DateTime.Today)
+            SemanaFecha = inicioSemana,
+            FechaCreacion = DateTime.UtcNow
         };
 
         for (int i = 0; i < 7; i++)
@@ -82,11 +87,31 @@ public class MenuService(ApplicationDbContext dbContext, PlatoService platoServi
         return nuevo;
     }
 
+    /// <summary>
+    /// Lunes de la semana a la que pertenece la fecha indicada.
+    /// </summary>
+    private static DateOnly InicioDeSemana(DateOnly fecha)
+    {
+        // DayOfWeek: Domingo = 0 ... Sábado = 6 → queremos Lunes = 0
+        var offset = ((int)fecha.DayOfWeek + 6) % 7;
+        return fecha.AddDays(-offset);
+    }
+
     public async Task<List<MenuSemanario>> GetAllMenusAsync() =>
-        await dbContext.MenuSemanars.OrderByDescending(m => m.SemanaFecha).ThenByDescending(m => m.FechaCreacion).ToListAsync();
+        await dbContext.MenuSemanars
+            .Include(m => m.Dias).ThenInclude(d => d.Desayuno)
+            .Include(m => m.Dias).ThenInclude(d => d.Almuerzo)
+            .Include(m => m.Dias).ThenInclude(d => d.Cena)
+            .OrderByDescending(m => m.SemanaFecha)
+            .ThenByDescending(m => m.FechaCreacion)
+            .ToListAsync();
 
     public async Task<MenuSemanario?> GetMenuByIdAsync(int id) =>
-        await dbContext.MenuSemanars.Include(m => m.Dias).FirstOrDefaultAsync(m => m.Id == id);
+        await dbContext.MenuSemanars
+            .Include(m => m.Dias).ThenInclude(d => d.Desayuno)
+            .Include(m => m.Dias).ThenInclude(d => d.Almuerzo)
+            .Include(m => m.Dias).ThenInclude(d => d.Cena)
+            .FirstOrDefaultAsync(m => m.Id == id);
 
     public async Task DeleteMenuAsync(int id)
     {

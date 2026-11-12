@@ -4,8 +4,8 @@
     ViewData["Title"] = "Historial de Menús";
 }
 
-<a asp-page="/Admin/Index" class="btn btn-sm btn-outline-secondary mb-3">&larr; Volver al Admin</a>
-<h2>📅 Historial de Menús Generados</h2>
+<h2 class="mb-2">📅 Historial de Menús Generados</h2>
+<partial name="_AdminNav" />
 <p class="text-muted">Consulta los menús semanales que han sido generados previamente.</p>
 
 @if (!Model.Menus.Any())

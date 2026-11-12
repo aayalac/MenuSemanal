@@ -8,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 // --- Base de datos SQLite ---
 var dbPath = Environment.GetEnvironmentVariable("DB_PATH")
     ?? Path.Combine(builder.Environment.ContentRootPath, "Data", "menus.db");
+
+// Asegurar que el directorio de la BD exista (p. ej. /app/data en el contenedor)
+var dbDir = Path.GetDirectoryName(Path.GetFullPath(dbPath));
+if (!string.IsNullOrEmpty(dbDir))
+    Directory.CreateDirectory(dbDir);
+
 builder.Services.AddDbContext<ApplicationDbContext>(opts =>
     opts.UseSqlite($"Data Source={dbPath}"));
 
@@ -18,14 +24,13 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// --- Aplicar migraciones automáticas y seed en desarrollo ---
-if (!app.Environment.IsProduction())
+// --- Aplicar migraciones y seed inicial (siempre, también en Production) ---
+using (var scope = app.Services.CreateScope())
 {
-    using var scope = app.Services.CreateScope();
     var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     ctx.Database.Migrate();
-    await DbSeeder.SeedAsync(app.Services);
 }
+await DbSeeder.SeedAsync(app.Services);
 
 // --- Pipeline HTTP ---
 if (!app.Environment.IsDevelopment())

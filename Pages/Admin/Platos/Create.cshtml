@@ -1,0 +1,42 @@
+@page
+@model Admin.Platos.CreateModel
+@{
+    ViewData["Title"] = "Nuevo Plato";
+}
+
+<a asp-page="/Admin/Platos/Index" class="btn btn-sm btn-outline-secondary mb-3">&larr; Volver al Catálogo</a>
+<h2>➕ Nuevo Plato</h2>
+<p class="text-muted">Agrega un nuevo plato al catálogo para incluirlo en los menús semanales.</p>
+
+@if (Model.Created)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        ✅ <strong>@Model.NuevoPlato!</strong> agregado correctamente.
+        <br/>
+        <a asp-page="./Edit" asp-route-id="@Model.PlatoId" class="alert-link">Editar detalles</a> ·
+        <a asp-page="./Index" class="alert-link">Ver catálogo</a>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+}
+
+<form method="post" class="mt-3" style="max-width: 500px;">
+    <div class="mb-3">
+        <label asp-for="Plato.Nombre" class="form-label">Nombre del Plato</label>
+        <input asp-for="Plato.Nombre" class="form-control" placeholder="Ej: Pollo a la naranja" autocomplete="off" autofocus />
+        <span asp-validation-for="Plato.Nombre" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Plato.Categoria" class="form-label">Categoría</label>
+        <select asp-for="Plato.Categoria" class="form-select">
+            <option value="">— Selecciona —</option>
+            <option value="Desayuno">🥞 Desayuno</option>
+            <option value="Almuerzo">🍲 Almuerzo</option>
+            <option value="Cena">🌙 Cena</option>
+        </select>
+        <span asp-validation-for="Plato.Categoria" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success btn-lg">💾 Guardar Plato</button>
+        <a asp-page="./Index" class="btn btn-outline-secondary btn-lg">Cancelar</a>
+    </div>
+</form>

@@ -15,7 +15,7 @@ namespace MenuSemanal.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.33");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.34");
 
             modelBuilder.Entity("MenuSemanal.Models.MenuDia", b =>
                 {
@@ -65,8 +65,7 @@ namespace MenuSemanal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SemanaFecha")
-                        .IsUnique();
+                    b.HasIndex("SemanaFecha");
 
                     b.ToTable("MenuSemanars");
                 });

@@ -7,6 +7,10 @@
 <div class="menu-container">
     <h1 class="menu-title">Menú Semanal</h1>
     <partial name="_AdminNav" />
+    @if (Model.SemanaFecha is not null)
+    {
+        <p class="text-muted mb-1">Semana del @Model.SemanaFecha.Value.ToString("dd/MM/yyyy")</p>
+    }
     <hr />
     <form method="post" class="menu-form">
         <div class="table-responsive">
@@ -64,6 +68,13 @@
 {
     <div class="alert alert-success mt-3" role="alert">
         @(Model.SuccessMessage)
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        @(Model.ErrorMessage)
     </div>
 }
 
