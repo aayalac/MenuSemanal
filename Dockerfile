@@ -1,22 +1,31 @@
 # =============================================
-# MenuSemanal - Dockerfile (production)
+# MenuSemanal - Dockerfile (multi-stage)
+#   docker build -t menusemanal .
+#   docker run -d -p 8080:8080 -v menusemanal-data:/app/data menusemanal
 # =============================================
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy AS base
+FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build
+WORKDIR /src
+COPY MenuSemanal.csproj .
+RUN dotnet restore MenuSemanal.csproj
+COPY . .
+RUN dotnet publish MenuSemanal.csproj -c Release -o /app/publish --no-restore /p:UseAppHost=false
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy AS final
 WORKDIR /app
 
-# Install wget for healthcheck
-RUN apt-get update && apt-get install -y --no-install-recommends wget curl && rm -rf /var/lib/apt/lists/*
+# wget para el HEALTHCHECK
+RUN apt-get update && apt-get install -y --no-install-recommends wget && rm -rf /var/lib/apt/lists/*
 
-# SECURITY: Don't use non-root user when mounting volumes owned by root/host user
-# The mounted volume /app/data will be writable by whoever mounts it
+ENV ASPNETCORE_URLS=http://+:8080 \
+    DOTNET_PRINT_TELEMETRY_MESSAGE=false \
+    DB_PATH=/app/data/menus.db
+
+# La BD vive en un volumen para sobrevivir a recreaciones del contenedor.
+VOLUME ["/app/data"]
 EXPOSE 8080
-ENV ASPNETCORE_URLS=http://+:8080
-ENV DOTNET_PRINT_TELEMETRY_MESSAGE=false
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD wget -qO- http://localhost:8080/health || exit 1
 
-# Copy published output
-COPY . .
-
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "MenuSemanal.dll"]

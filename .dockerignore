@@ -16,3 +16,10 @@
 
 # Ignore this file
 Dockerfile
+
+# Control de versiones e IDE
+.git/
+.vscode/
+**/*.csproj.user
+tests/
+*.sln

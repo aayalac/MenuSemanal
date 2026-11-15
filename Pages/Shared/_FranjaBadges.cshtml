@@ -1,0 +1,12 @@
+@model MenuSemanal.Models.PlatoCategoria
+@using MenuSemanal.Models
+@foreach (var franja in Model.Separar())
+{
+    <span class="badge me-1 @(franja switch
+        {
+            PlatoCategoria.Desayuno => "bg-primary",
+            PlatoCategoria.Almuerzo => "bg-warning text-dark",
+            PlatoCategoria.Cena => "bg-danger",
+            _ => "bg-secondary"
+        })">@franja</span>
+}

@@ -7,34 +7,33 @@
 <a asp-page="/Admin/Platos/Index" class="btn btn-sm btn-outline-secondary mb-3">&larr; Volver al Catálogo</a>
 <h2 class="text-danger">🗑️ Eliminar Plato</h2>
 
-<div class="alert alert-warning">
-    <strong>&iquest;Estás seguro?</strong> Esta acción eliminará permanentemente el siguiente plato del catálogo.
-</div>
-
 @if (Model.Plato != null)
 {
+    <div class="alert alert-warning">
+        <strong>&iquest;Estás seguro?</strong>
+        @if (Model.EnUso)
+        {
+            <text>Este plato aparece en menús guardados: se <strong>desactivará</strong> para conservar el historial y dejará de usarse en menús nuevos.</text>
+        }
+        else
+        {
+            <text>Esta acción eliminará permanentemente el siguiente plato del catálogo.</text>
+        }
+    </div>
+
     <dl class="row">
         <dt class="col-sm-3">Nombre</dt>
         <dd class="col-sm-9"><strong>@Model.Plato.Nombre</strong></dd>
 
-        <dt class="col-sm-3">Categoría</dt>
-        <dd class="col-sm-9">
-            <span class="badge @(Model.Plato.Categoria.ToString() switch
-                { "Desayuno" => "bg-primary",
-                  "Almuerzo" => "bg-warning text-dark",
-                  "Cena" => "bg-danger",
-                  _ => "bg-secondary" })">
-                @Model.Plato.Categoria
-            </span>
-        </dd>
+        <dt class="col-sm-3">Franjas</dt>
+        <dd class="col-sm-9"><partial name="_FranjaBadges" model="Model.Plato.Franjas" /></dd>
 
         <dt class="col-sm-3">Fecha de Creación</dt>
         <dd class="col-sm-9">@Model.Plato.FechaCreacion.ToString("d")</dd>
     </dl>
 
     <form method="post" class="mt-3">
-        <input type="hidden" asp-for="Plato!.Id" />
-        <button type="submit" class="btn btn-danger btn-lg">🗑 Sí, Eliminar Permanente</button>
+                <button type="submit" class="btn btn-danger btn-lg">🗑 Sí, @(Model.EnUso ? "Desactivar" : "Eliminar Permanente")</button>
         <a asp-page="./Index" class="btn btn-secondary btn-lg">Cancelar</a>
     </form>
 }

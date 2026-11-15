@@ -1,0 +1,22 @@
+@model IEnumerable<MenuSemanal.Models.PlatoCategoria>
+@using MenuSemanal.Models
+@{
+    var iconos = new Dictionary<PlatoCategoria, string>
+    {
+        [PlatoCategoria.Desayuno] = "🥞",
+        [PlatoCategoria.Almuerzo] = "🍲",
+        [PlatoCategoria.Cena] = "🌙"
+    };
+}
+<fieldset class="mb-3">
+    <legend class="form-label fs-6">Franjas <small class="text-muted">(puedes elegir varias)</small></legend>
+    @foreach (var franja in PlatoCategoriaExtensions.Todas)
+    {
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" name="Plato.Franjas" value="@franja"
+                   id="franja-@franja" checked="@Model.Contains(franja)" />
+            <label class="form-check-label" for="franja-@franja">@iconos[franja] @franja</label>
+        </div>
+    }
+    <div><span class="text-danger" data-valmsg-for="Plato.Franjas">@ViewData.ModelState["Plato.Franjas"]?.Errors.FirstOrDefault()?.ErrorMessage</span></div>
+</fieldset>

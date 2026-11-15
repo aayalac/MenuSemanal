@@ -5,37 +5,25 @@
 }
 
 <a asp-page="/Admin/Platos/Index" class="btn btn-sm btn-outline-secondary mb-3">&larr; Volver al Catálogo</a>
-<h2>✏️ @((Model.Plato != null) ? "Editar Plato" : "Plato No Encontrado")</h2>
+<h2>✏️ Editar Plato</h2>
 
-@if (Model.Message != null)
+@if (!Model.Encontrado)
 {
-    <div class="alert alert-@(Model.Success ? "success" : "danger")" role="alert">@Model.Message</div>
+    <div class="alert alert-info">El plato solicitado no fue encontrado.</div>
 }
-
-@if (Model.Plato != null)
+else
 {
     <form method="post" class="mt-3" style="max-width: 500px;">
-        <div class="mb-3">
-            <label asp-for="Plato.Id" class="form-label d-none"></label>
-            <input asp-for="Plato.Id" type="hidden" />
-        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="mb-3">
             <label asp-for="Plato.Nombre" class="form-label">Nombre del Plato</label>
             <input asp-for="Plato.Nombre" class="form-control" placeholder="Ej: Pollo a la naranja" autofocus />
             <span asp-validation-for="Plato.Nombre" class="text-danger"></span>
         </div>
-        <div class="mb-3">
-            <label asp-for="Plato.Categoria" class="form-label">Categoría</label>
-            <select asp-for="Plato.Categoria" class="form-select">
-                <option value="Desayuno">🥞 Desayuno</option>
-                <option value="Almuerzo">🍲 Almuerzo</option>
-                <option value="Cena">🌙 Cena</option>
-            </select>
-            <span asp-validation-for="Plato.Categoria" class="text-danger"></span>
-        </div>
+        <partial name="_FranjasCheckboxes" model="Model.Plato.Franjas" />
         <div class="mb-3 form-check">
             <input asp-for="Plato.Activo" class="form-check-input" />
-            <label asp-for="Plato.Activo" class="form-check-label">Activo</label>
+            <label asp-for="Plato.Activo" class="form-check-label">Activo (se usa al generar menús)</label>
         </div>
         <button type="submit" class="btn btn-success">💾 Guardar Cambios</button>
     </form>

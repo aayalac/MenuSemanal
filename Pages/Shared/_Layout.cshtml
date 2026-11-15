@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/MenuSemanal.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="container">
+    <div class="@(ViewData["FullWidth"] is true ? "container-fluid px-4" : "container")">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
