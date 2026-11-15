@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MenuSemanal.Models;
@@ -9,57 +8,44 @@ namespace MenuSemanal.Pages.Admin.Platos;
 public class EditModel(PlatoService platoService) : PageModel
 {
     [BindProperty]
-    public PlatoDto Plato { get; set; } = new();
+    public PlatoForm Plato { get; set; } = new();
 
-    public Plato? PlatoOriginal { get; set; }
-    public string? Message { get; set; }
-    public bool Success { get; set; }
+    public bool Encontrado { get; set; }
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
         var plato = await platoService.GetByIdAsync(id);
-        if (plato == null)
-        {
-            Message = "El plato solicitado no fue encontrado.";
-            return Page();
-        }
+        if (plato == null) return Page();
 
-        PlatoOriginal = plato;
-        Plato = new PlatoDto
+        Encontrado = true;
+        Plato = new PlatoForm
         {
             Id = plato.Id,
             Nombre = plato.Nombre,
-            Categoria = plato.Categoria,
+            Franjas = plato.Franjas.Separar().ToList(),
             Activo = plato.Activo
         };
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(int id)
     {
-        if (ModelState.IsValid && PlatoOriginal != null)
-        {
-            var ok = await platoService.UpdateAsync(Plato.Id, Plato.Nombre, Plato.Categoria);
-            if (ok)
-            {
-                Message = "Plato actualizado correctamente.";
-                Success = true;
-                return RedirectToPage("./Index");
-            }
-            Message = "Error al actualizar el plato.";
-            Success = false;
-        }
-        return Page();
-    }
+        Encontrado = true;
+        Plato.Id = id;
 
-    public class PlatoDto
-    {
-        public int Id { get; set; }
-        [Required(ErrorMessage = "El nombre es obligatorio")]
-        [MaxLength(200, ErrorMessage = "Máximo 200 caracteres")]
-        public string Nombre { get; set; } = "";
-        [Required]
-        public PlatoCategoria Categoria { get; set; }
-        public bool Activo { get; set; } = true;
+        if (!ModelState.IsValid)
+            return Page();
+
+        if (await platoService.ExisteNombreAsync(Plato.Nombre, excluirId: id))
+        {
+            ModelState.AddModelError("Plato.Nombre", $"Ya existe otro plato llamado '{Plato.Nombre.Trim()}'.");
+            return Page();
+        }
+
+        if (!await platoService.UpdateAsync(id, Plato.Nombre, Plato.Franjas.Combinar(), Plato.Activo))
+            return NotFound();
+
+        TempData["SuccessMsg"] = $"Plato '{Plato.Nombre.Trim()}' actualizado correctamente.";
+        return RedirectToPage("./Index");
     }
 }

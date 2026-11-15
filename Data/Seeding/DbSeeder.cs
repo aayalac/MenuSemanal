@@ -1,6 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using MenuSemanal.Data;
 using MenuSemanal.Models;
 using System.Text.Json;
 
@@ -8,7 +6,8 @@ namespace MenuSemanal.Data.Seeding;
 
 /// <summary>
 /// Seeder que carga los platos desde comidas.json cuando la BD está vacía.
-/// Se ejecuta una sola vez durante la primera migración/aplicación.
+/// Un nombre que aparece en varias secciones del JSON (ej. "Panqueques" en
+/// desayunos y cenas) se guarda como un único plato con varias franjas.
 /// </summary>
 public static class DbSeeder
 {
@@ -16,63 +15,46 @@ public static class DbSeeder
     {
         using var scope = serviceProvider.CreateScope();
         var ctx = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(DbSeeder));
 
-        // Solo sembrar si la tabla de platoss está vacía
-        if (ctx.Platoss.Any())
+        if (await ctx.Platos.AnyAsync())
             return;
 
-        Console.WriteLine("[DbSeeder] Tabla de platoss vacía, cargando desde comidas.json...");
-
-        var jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "Data", "comidas.json");
+        var jsonPath = Path.Combine(AppContext.BaseDirectory, "Data", "comidas.json");
         if (!File.Exists(jsonPath))
         {
-            Console.WriteLine("[DbSeeder] Warning: comidas.json no encontrado, saltando seeding.");
+            logger.LogWarning("comidas.json no encontrado en {Ruta}; se omite la carga inicial.", jsonPath);
             return;
         }
 
         var json = await File.ReadAllTextAsync(jsonPath);
-        var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var menuData = JsonSerializer.Deserialize<MenuData>(json, opciones);
-
+        var menuData = JsonSerializer.Deserialize<MenuData>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         if (menuData == null)
         {
-            Console.WriteLine("[DbSeeder] Warning: errores al deserialize comidas.json, saltando seeding.");
+            logger.LogWarning("No se pudo deserializar comidas.json; se omite la carga inicial.");
             return;
         }
 
-        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var platos = new Dictionary<string, Plato>(StringComparer.OrdinalIgnoreCase);
+        var ahora = DateTime.UtcNow;
 
-        foreach (var item in menuData.Desayunos)
+        void Agregar(IEnumerable<ComidaItem> items, PlatoCategoria franja)
         {
-            ctx.Platoss.Add(new Plato
+            foreach (var nombre in items.Select(i => i.Nombre.Trim()).Where(n => n.Length > 0))
             {
-                Nombre = item.Nombre,
-                Categoria = PlatoCategoria.Desayuno,
-                FechaCreacion = DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime
-            });
+                if (platos.TryGetValue(nombre, out var existente))
+                    existente.Franjas |= franja;
+                else
+                    platos[nombre] = new Plato { Nombre = nombre, Franjas = franja, FechaCreacion = ahora };
+            }
         }
 
-        foreach (var item in menuData.Almuerzos)
-        {
-            ctx.Platoss.Add(new Plato
-            {
-                Nombre = item.Nombre,
-                Categoria = PlatoCategoria.Almuerzo,
-                FechaCreacion = DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime
-            });
-        }
+        Agregar(menuData.Desayunos, PlatoCategoria.Desayuno);
+        Agregar(menuData.Almuerzos, PlatoCategoria.Almuerzo);
+        Agregar(menuData.Cenas, PlatoCategoria.Cena);
 
-        foreach (var item in menuData.Cenas)
-        {
-            ctx.Platoss.Add(new Plato
-            {
-                Nombre = item.Nombre,
-                Categoria = PlatoCategoria.Cena,
-                FechaCreacion = DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime
-            });
-        }
-
+        ctx.Platos.AddRange(platos.Values);
         await ctx.SaveChangesAsync();
-        Console.WriteLine($"[DbSeeder] ✓ {ctx.Platoss.Count()} platos insertados correctamente.");
+        logger.LogInformation("{Cantidad} platos cargados desde comidas.json.", platos.Count);
     }
 }

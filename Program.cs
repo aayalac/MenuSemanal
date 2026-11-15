@@ -47,3 +47,6 @@ app.MapGet("/health", () => Results.Ok("healthy"));
 
 app.MapRazorPages();
 app.Run();
+
+// Expuesto para las pruebas de integración (WebApplicationFactory<Program>).
+public partial class Program;

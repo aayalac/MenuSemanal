@@ -1,62 +1,83 @@
-﻿@page
+@page
 @model IndexModel
+@using MenuSemanal.Models
 @{
     ViewData["Title"] = "Menú Semanal";
+    ViewData["FullWidth"] = true;
 }
 
 <div class="menu-container">
     <h1 class="menu-title">Menú Semanal</h1>
     <partial name="_AdminNav" />
-    @if (Model.SemanaFecha is not null)
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
     {
-        <p class="text-muted mb-1">Semana del @Model.SemanaFecha.Value.ToString("dd/MM/yyyy")</p>
+        <div class="alert alert-success" role="alert">@Model.SuccessMessage</div>
+    }
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage ?? Model.Aviso))
+    {
+        <div class="alert alert-danger" role="alert">@(Model.ErrorMessage ?? Model.Aviso)</div>
+    }
+
+    @if (Model.Menu is not null)
+    {
+        <p class="text-muted mb-1">Semana del @Model.Menu.SemanaFecha.ToString("dd/MM/yyyy")</p>
     }
     <hr />
     <form method="post" class="menu-form">
-        <div class="table-responsive">
-            <table class="table table-bordered menu-table table-hover">
-                <thead>
-                    <tr>
-                        <th>Comida</th>
-                        @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
+        @if (Model.Menu is not null)
+        {
+            <input type="hidden" asp-for="MenuId" />
+            <div class="table-responsive">
+                <table class="table table-bordered menu-table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Comida</th>
+                            @for (int i = 0; i < Model.Dias.Count; i++)
+                            {
+                                <th class="dia-header">
+                                    @Model.Dias[i].Nombre
+                                    <input type="hidden" asp-for="Dias[i].DiaSemana" />
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var franja in PlatoCategoriaExtensions.Todas)
                         {
-                            <th class="dia-header">@Model.WeeklyMenu[i].Dia</th>
+                            <tr>
+                                <td class="comida-label">@franja</td>
+                                @for (int i = 0; i < Model.Dias.Count; i++)
+                                {
+                                    var seleccion = Model.SeleccionDe(Model.Dias[i], franja);
+                                    var nombreSeleccionado = Model.Opciones[franja].FirstOrDefault(p => p.Id == seleccion)?.Nombre;
+                                    <td class="px-1">
+                                        <select title="@nombreSeleccionado" name="Dias[@i].@(franja)Id" class="form-select menu-input"
+                                                aria-label="@franja del @Model.Dias[i].Nombre">
+                                            <option value="">—</option>
+                                            @foreach (var plato in Model.Opciones[franja])
+                                            {
+                                                <option value="@plato.Id" selected="@(plato.Id == seleccion)">
+                                                    @plato.Nombre@(plato.Activo ? "" : " (inactivo)")
+                                                </option>
+                                            }
+                                        </select>
+                                    </td>
+                                }
+                            </tr>
                         }
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="comida-label">Desayuno</td>
-                        @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
-                        {
-                            <td>
-                                <input asp-for="WeeklyMenu[i].Desayuno" class="form-control menu-input" disabled />
-                            </td>
-                        }
-                    </tr>
-                    <tr>
-                        <td class="comida-label">Almuerzo</td>
-                        @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
-                        {
-                            <td>
-                                <input asp-for="WeeklyMenu[i].Almuerzo" class="form-control menu-input" disabled />
-                            </td>
-                        }
-                    </tr>
-                    <tr>
-                        <td class="comida-label">Cena</td>
-                        @for (int i = 0; i < Model.WeeklyMenu.Count; i++)
-                        {
-                            <td>
-                                <input asp-for="WeeklyMenu[i].Cena" class="form-control menu-input" disabled />
-                            </td>
-                        }
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <hr />
+                    </tbody>
+                </table>
+            </div>
+            <hr />
+        }
         <div class="menu-actions">
+            @if (Model.Menu is not null)
+            {
+                <button type="submit" asp-page-handler="Guardar" class="btn btn-primary btn-lg">
+                    💾 Guardar Cambios
+                </button>
+            }
             <button type="submit" asp-page-handler="Generar" class="btn btn-success btn-lg">
                 ✨ Generar Nuevo Menú
             </button>
@@ -64,28 +85,10 @@
     </form>
 </div>
 
-@if (!string.IsNullOrEmpty(Model.SuccessMessage))
-{
-    <div class="alert alert-success mt-3" role="alert">
-        @(Model.SuccessMessage)
-    </div>
-}
-
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <div class="alert alert-danger mt-3" role="alert">
-        @(Model.ErrorMessage)
-    </div>
-}
-
 @section Scripts {
-    <style>
-        .disabled-input {
-            opacity: 0.85;
-            cursor: default;
-        }
-    </style>
     <script>
-        document.querySelectorAll('.menu-input').forEach(input => input.classList.add('disabled-input'));
+        // Mantener el tooltip con el nombre completo del plato elegido (los largos se recortan).
+        document.querySelectorAll('select.menu-input').forEach(s =>
+            s.addEventListener('change', () => s.title = s.selectedOptions[0]?.text.trim() ?? ''));
     </script>
 }

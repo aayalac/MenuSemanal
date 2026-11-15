@@ -53,3 +53,11 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /.obsidian
+
+# Base de datos SQLite local (datos de ejecución, no código)
+*.db
+*.db-shm
+*.db-wal
+
+# Preferencias locales de IDE
+*.csproj.user

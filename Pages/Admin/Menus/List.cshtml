@@ -8,6 +8,11 @@
 <partial name="_AdminNav" />
 <p class="text-muted">Consulta los menús semanales que han sido generados previamente.</p>
 
+@if (TempData["SuccessMsg"] is string msg)
+{
+    <div class="alert alert-success" role="alert">@msg</div>
+}
+
 @if (!Model.Menus.Any())
 {
     <div class="alert alert-info" role="status">

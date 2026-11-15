@@ -5,8 +5,8 @@ namespace MenuSemanal.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public DbSet<Plato> Platoss => Set<Plato>();
-    public DbSet<MenuSemanario> MenuSemanars => Set<MenuSemanario>();
+    public DbSet<Plato> Platos => Set<Plato>();
+    public DbSet<MenuSemanario> MenusSemanales => Set<MenuSemanario>();
     public DbSet<MenuDia> MenuDias => Set<MenuDia>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

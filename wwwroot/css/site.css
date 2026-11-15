@@ -40,8 +40,17 @@ body {
   white-space: nowrap;
 }
 
-.dia-header {
-  min-width: 130px;
+/* Las 7 columnas se reparten el ancho por igual; en pantallas pequeñas
+   la tabla hace scroll horizontal dentro de .table-responsive. */
+.menu-table {
+  table-layout: fixed;
+  width: 100%;
+  min-width: 1100px;
+}
+
+.menu-table th:first-child,
+.menu-table td:first-child {
+  width: 100px;
 }
 
 .comida-label {
@@ -49,14 +58,16 @@ body {
   text-align: center;
   vertical-align: middle;
   white-space: nowrap;
-  min-width: 100px;
   background-color: #f8f9fa;
 }
 
 .menu-input {
   border: 1px solid #ced4da;
-  text-align: center;
-  min-width: 120px;
+  font-size: 0.9rem;
+  padding-left: 0.5rem;
+  padding-right: 1.75rem;
+  background-position: right 0.5rem center;
+  text-overflow: ellipsis;
 }
 
 .menu-input:focus {

@@ -15,7 +15,7 @@ namespace MenuSemanal.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.34");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.33");
 
             modelBuilder.Entity("MenuSemanal.Models.MenuDia", b =>
                 {
@@ -67,7 +67,7 @@ namespace MenuSemanal.Migrations
 
                     b.HasIndex("SemanaFecha");
 
-                    b.ToTable("MenuSemanars");
+                    b.ToTable("MenusSemanales");
                 });
 
             modelBuilder.Entity("MenuSemanal.Models.Plato", b =>
@@ -79,11 +79,11 @@ namespace MenuSemanal.Migrations
                     b.Property<bool>("Activo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Categoria")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("Franjas")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -94,7 +94,7 @@ namespace MenuSemanal.Migrations
 
                     b.HasIndex("Nombre");
 
-                    b.ToTable("Platoss");
+                    b.ToTable("Platos");
                 });
 
             modelBuilder.Entity("MenuSemanal.Models.MenuDia", b =>

@@ -6,16 +6,21 @@
 
 <h2 class="mb-2">🍳 Catálogo de Platos</h2>
 <partial name="_AdminNav" />
-<p class="text-muted">Administra los platos disponibles para cada tipo de comida.</p>
+<p class="text-muted">Administra los platos disponibles. Un plato puede pertenecer a varias franjas.</p>
+
+@if (TempData["SuccessMsg"] is string msg)
+{
+    <div class="alert alert-success" role="alert">@msg</div>
+}
 
 <form method="get" class="row g-2 mb-3 align-items-end">
     <div class="col-auto">
         <label for="filtro" class="form-label visually-hidden">Filtrar:</label>
         <select id="filtro" name="categoria" class="form-select" onchange="this.form.submit()">
-            <option value="">Todos</option>
-            <option value="Desayuno" selected="@(Model.Filtro == "")">Desayunos (@Model.Estads.Desayuno)</option>
-            <option value="Almuerzo" selected="@(Model.Filtro == "Almuerzo")">Almuerzos (@Model.Estads.Almuerzo)</option>
-            <option value="Cena" selected="@(Model.Filtro == "Cena")">Cenas (@Model.Estads.Cena)</option>
+            <option value="">Todos (@Model.Total)</option>
+            <option value="Desayuno" selected="@(Model.Filtro == "Desayuno")">Desayunos (@Model.Estadisticas.Desayuno)</option>
+            <option value="Almuerzo" selected="@(Model.Filtro == "Almuerzo")">Almuerzos (@Model.Estadisticas.Almuerzo)</option>
+            <option value="Cena" selected="@(Model.Filtro == "Cena")">Cenas (@Model.Estadisticas.Cena)</option>
         </select>
     </div>
     <div class="col-auto">
@@ -28,26 +33,18 @@
         <tr>
             <th>#</th>
             <th>Nombre</th>
-            <th>Categoría</th>
+            <th>Franjas</th>
             <th>Estado</th>
             <th class="text-end">Acciones</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var plato in Model.Platoss)
+        @foreach (var plato in Model.Platos)
         {
             <tr>
                 <td>@plato.Id</td>
                 <td><strong>@Html.DisplayFor(_ => plato.Nombre)</strong></td>
-                <td>
-                    <span class="badge @(plato.Categoria.ToString() switch
-                        { "Desayuno" => "bg-primary",
-                          "Almuerzo" => "bg-warning text-dark",
-                          "Cena" => "bg-danger",
-                          _ => "bg-secondary" })">
-                        @plato.Categoria
-                    </span>
-                </td>
+                <td><partial name="_FranjaBadges" model="plato.Franjas" /></td>
                 <td>
                     @if (plato.Activo)
                     {
@@ -64,7 +61,7 @@
                 </td>
             </tr>
         }
-        @if (!Model.Platoss.Any())
+        @if (!Model.Platos.Any())
         {
             <tr>
                 <td colspan="5" class="text-center text-muted py-4">No se encontraron platos.</td>

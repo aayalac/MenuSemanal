@@ -14,7 +14,7 @@
         <div class="card h-100 shadow-sm">
             <div class="card-body">
                 <h5 class="card-title">🍳 Gestionar Platos</h5>
-                <p class="card-text text-muted">Agregar, editar o eliminar platos del catálogo por categoría.</p>
+                <p class="card-text text-muted">Agregar, editar o eliminar platos del catálogo por franja (un plato puede estar en varias).</p>
                 <a asp-page="/Admin/Platos/Index" class="btn btn-primary">Ir a Platos</a>
             </div>
         </div>
@@ -39,7 +39,7 @@
     <div class="col-md-4">
         <div class="card bg-light text-center shadow-sm">
             <div class="card-body">
-                <h3 class="text-primary">@Model.TotalPlatoss</h3>
+                <h3 class="text-primary">@Model.TotalPlatos</h3>
                 <small class="text-muted">Total de Platos</small>
             </div>
         </div>
