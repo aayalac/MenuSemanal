@@ -19,7 +19,7 @@ DATA=${DATA:-/opt/menusemanal/data}
 BACKUP_ROOT=${BACKUP_ROOT:-/root/backup-menusemanal}
 CONTAINER=${CONTAINER:-menusemanal}
 PORT=${PORT:-4002}
-APP_TZ=${APP_TZ:-America/El_Salvador}
+APP_TZ=${APP_TZ:-America/Bogota}
 URL="http://localhost:$PORT"
 
 die()  { echo "ERROR: $*" >&2; exit 1; }

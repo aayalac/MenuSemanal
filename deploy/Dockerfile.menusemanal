@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends wget curl && rm
 
 ENV ASPNETCORE_URLS=http://+:8080 \
     DOTNET_PRINT_TELEMETRY_MESSAGE=false \
-    DB_PATH=/app/data/menus.db
+    DB_PATH=/app/data/menus.db \
+    TZ=America/Bogota
 
 VOLUME ["/app/data"]
 EXPOSE 8080
