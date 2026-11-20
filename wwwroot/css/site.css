@@ -19,11 +19,11 @@ html {
 
 body {
   margin-bottom: 80px;
+  margin-top: 5%;
 }
 
 .menu-container {
     max-width: 100%;
-    margin-top: 15%;    
 }
 
 .menu-title {

@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends wget && rm -rf 
 
 ENV ASPNETCORE_URLS=http://+:8080 \
     DOTNET_PRINT_TELEMETRY_MESSAGE=false \
-    DB_PATH=/app/data/menus.db
+    DB_PATH=/app/data/menus.db \
+    TZ=America/Bogota
 
 # La BD vive en un volumen para sobrevivir a recreaciones del contenedor.
 VOLUME ["/app/data"]

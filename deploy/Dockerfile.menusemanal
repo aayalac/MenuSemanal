@@ -1,0 +1,25 @@
+# =============================================
+# MenuSemanal - imagen de producción a partir del publish ya compilado
+# (app-linux.zip generado por deploy/publicar.sh). Se usa en el servidor
+# para no tener que descargar la imagen del SDK de .NET.
+# =============================================
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy
+WORKDIR /app
+
+# wget/curl para el HEALTHCHECK y diagnóstico
+RUN apt-get update && apt-get install -y --no-install-recommends wget curl && rm -rf /var/lib/apt/lists/*
+
+ENV ASPNETCORE_URLS=http://+:8080 \
+    DOTNET_PRINT_TELEMETRY_MESSAGE=false \
+    DB_PATH=/app/data/menus.db \
+    TZ=America/Bogota
+
+VOLUME ["/app/data"]
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD wget -qO- http://localhost:8080/health || exit 1
+
+COPY . .
+
+ENTRYPOINT ["dotnet", "MenuSemanal.dll"]
